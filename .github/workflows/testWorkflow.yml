@@ -22,7 +22,8 @@ jobs:
       - name: Run Project and Make API request
         run: |
           # Make API request using curl with Authorization header
-          curl -X POST "${{ env.DIFY_BASE_URL }}" \
+          curl -X POST "${{ env.DIFY_BASE_URL }}/workflows/run" \
           -H "Authorization: Bearer ${{ secrets.DIFY_Authorization }}" \
-          -d "$DIFY_INPUTS"  # Assuming $DIFY_INPUTS is JSON or the body of the request
+          -H "Content-Type:application/json" \
+          -d "$DIFY_INPUTS": " ${{ secrets.DIFY_INPUTS }}" # Assuming $DIFY_INPUTS is JSON or the body of the request
           yarn workflowDify  # Run the project workflow after the API call
