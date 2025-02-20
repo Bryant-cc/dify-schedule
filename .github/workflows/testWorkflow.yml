@@ -2,21 +2,27 @@ name: Auto
 
 on:
   schedule:
-    - cron: "0 * * * *" # 北京时间上午06:30
+    - cron: "0 * * * *"  # 北京时间上午06:30
   workflow_dispatch:
 
 env:
-  DIFY_TOKENS: ${{ secrets.DIFY_TOKENS }}
-  DIFY_BASE_URL: ${{ secrets.DIFY_BASE_URL }}
-  DIFY_INPUTS: ${{ secrets.DIFY_INPUTS }}
+  DIFY_TOKENS: ${{ secrets.DIFY_TOKENS }}  # API token stored in GitHub secrets
+  DIFY_BASE_URL: ${{ secrets.DIFY_BASE_URL }}  # Base URL for the API
+  DIFY_INPUTS: ${{ secrets.DIFY_INPUTS }}  # Any other inputs needed by the workflow
 
 jobs:
   DifyWorkflow:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-      - name: Run Project
+      - uses: actions/checkout@v2  # Check out the code
+      - uses: actions/setup-node@v2  # Set up Node.js environment
+      - name: Install dependencies
+        run: yarn  # Install dependencies with yarn
+      - name: Run Project and Make API request
         run: |
-          yarn
-          yarn workflowDify
+          # Make API request using curl with Authorization header
+          curl -X POST "${{ env.DIFY_BASE_URL }}" \
+          -H "Authorization: Bearer ${{ secrets.DIFY_Authorization }}" \
+          -d "$DIFY_INPUTS"  # Assuming $DIFY_INPUTS is JSON or the body of the request
+          yarn workflowDify  # Run the project workflow after the API call
