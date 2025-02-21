@@ -19,7 +19,6 @@ jobs:
       - uses: actions/setup-node@v2  # Set up Node.js environment
       - name: Install dependencies
         run: yarn  # Install dependencies with yarn
-
       - name: Run Project and Make API request
         run: |
           # 转义 DIFY_INPUTS 中的特殊字符并确保其作为 JSON 正确传递
