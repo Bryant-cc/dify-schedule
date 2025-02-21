@@ -19,6 +19,8 @@ jobs:
       - uses: actions/setup-node@v2  # Set up Node.js environment
       - name: Install dependencies
         run: yarn  # Install dependencies with yarn
+      - name: Debugging DIFY_INPUTS value
+        run: echo "${{ secrets.DIFY_INPUTS }}"
       - name: Run Project and Make API request
         run: |
           # Make API request using curl with Authorization header
