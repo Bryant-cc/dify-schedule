@@ -30,7 +30,7 @@ jobs:
           -H "Content-Type: application/json" \
           -d '{
                 "inputs": '"${INPUTS}"',
-                "response_mode": "streaming",  # 在这里填写你需要的 response_mode 值
-                "user": "github"  # 在这里填写你需要的 user 值
-              }'  # 传递包括 response_mode 和 user 的正确格式化的 JSON 数据
+                "response_mode": "streaming",
+                "user": "github"  
+              }' 
           yarn workflowDify  # 运行项目工作流
