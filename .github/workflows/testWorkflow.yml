@@ -28,5 +28,9 @@ jobs:
           curl -X POST "${{ env.DIFY_BASE_URL }}/workflows/run" \
           -H "Authorization: Bearer ${{ secrets.DIFY_TOKENS }}" \
           -H "Content-Type: application/json" \
-          -d '{"inputs": '"${INPUTS}"'}'  # 传递正确格式化的 JSON 数据
+          -d '{
+                "inputs": '"${INPUTS}"',
+                "response_mode": "streaming",  # 在这里填写你需要的 response_mode 值
+                "user": "github"  # 在这里填写你需要的 user 值
+              }'  # 传递包括 response_mode 和 user 的正确格式化的 JSON 数据
           yarn workflowDify  # 运行项目工作流
