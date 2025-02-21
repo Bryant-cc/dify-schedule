@@ -2,7 +2,7 @@ name: Auto
 
 on:
   schedule:
-    - cron: "* * * * *"  # 北京时间上午06:30
+    - cron: "* * * * *"  
   workflow_dispatch:
 
 env:
@@ -24,14 +24,23 @@ jobs:
       - name: Run Project and Make API request
         run: |
           # 转义 DIFY_INPUTS 中的特殊字符并确保其作为 JSON 正确传递
-          INPUTS=$(echo "${{ secrets.DIFY_INPUTS }}" | jq -R .)  # 使用 jq 进行转义
-          echo "Escaped DIFY_INPUTS: ${INPUTS}"  # 打印转义后的输入，方便调试
-          curl -X POST "${{ env.DIFY_BASE_URL }}/workflows/run" \
-          -H "Authorization: Bearer ${{ secrets.DIFY_TOKENS }}" \
-          -H "Content-Type: application/json" \
-          -d '{
-                "inputs": '"${INPUTS}"',
-                "response_mode": "streaming",
-                "user": "github"  
-              }' 
+           INPUT_JSON=$(echo "$DIFY_INPUTS" | jq -c .)
+           echo "Validated Input JSON:"
+           echo "$INPUT_JSON"
+           # 生成请求体
+           REQUEST_BODY=$(jq -n \
+           --argjson inputs "$INPUT_JSON" \
+          '{
+        "inputs": $inputs,
+        "response_mode": "streaming",
+        "user": "github"
+      }')
+
+          echo "Final Request Body:"
+          echo "$REQUEST_BODY"
+
+          curl -v -X POST "$DIFY_BASE_URL/workflows/run" \
+      -H "Authorization: Bearer $DIFY_TOKENS" \
+      -H "Content-Type: application/json" \
+      -d "$REQUEST_BODY"
           yarn workflowDify  # 运行项目工作流
