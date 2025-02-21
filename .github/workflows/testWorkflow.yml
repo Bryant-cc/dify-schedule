@@ -25,6 +25,7 @@ jobs:
         run: |
           # 转义 DIFY_INPUTS 中的特殊字符并确保其作为 JSON 正确传递
           INPUTS=$(echo "${{ secrets.DIFY_INPUTS }}" | jq -R .)  # 使用 jq 进行转义
+          echo "Escaped DIFY_INPUTS: ${INPUTS}"  # 打印转义后的输入，方便调试
           curl -X POST "${{ env.DIFY_BASE_URL }}/workflows/run" \
           -H "Authorization: Bearer ${{ secrets.DIFY_TOKENS }}" \
           -H "Content-Type: application/json" \
