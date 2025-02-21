@@ -23,9 +23,10 @@ jobs:
         run: echo "${{ secrets.DIFY_INPUTS }}"
       - name: Run Project and Make API request
         run: |
-          # Make API request using curl with Authorization header
+          # 转义 DIFY_INPUTS 中的特殊字符并确保其作为 JSON 正确传递
+          INPUTS=$(echo "${{ secrets.DIFY_INPUTS }}" | jq -R .)  # 使用 jq 进行转义
           curl -X POST "${{ env.DIFY_BASE_URL }}/workflows/run" \
           -H "Authorization: Bearer ${{ secrets.DIFY_TOKENS }}" \
-          -H "Content-Type:application/json" \
-          -d '{"inputs": "${{ secrets.DIFY_INPUTS }}"}'
-          yarn workflowDify  # Run the project workflow after the API call
+          -H "Content-Type: application/json" \
+          -d '{"inputs": '"${INPUTS}"'}'  # 传递正确格式化的 JSON 数据
+          yarn workflowDify  # 运行项目工作流
