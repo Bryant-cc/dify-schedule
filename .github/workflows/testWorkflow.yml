@@ -25,5 +25,5 @@ jobs:
           curl -X POST "${{ env.DIFY_BASE_URL }}/workflows/run" \
           -H "Authorization: Bearer ${{ secrets.DIFY_TOKENS }}" \
           -H "Content-Type:application/json" \
-          '{"inputs": "${{ secrets.DIFY_INPUTS }}"}'
+          -d '{"inputs": "${{ secrets.DIFY_INPUTS }}"}'
           yarn workflowDify  # Run the project workflow after the API call
